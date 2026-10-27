@@ -18,13 +18,18 @@ jobs:
         uses: actions/checkout@v4
         with:
           persist-credentials: true
-      - name: Install SVG renderer and Korean fonts
-        run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq librsvg2-bin fonts-noto-cjk
       - name: Render social preview image (1200 x 630)
         run: |
-          rsvg-convert -w 1200 -h 630 -o og.png og.svg
+          if command -v rsvg-convert >/dev/null; then
+            rsvg-convert -w 1200 -h 630 -o og.png og.svg
+          elif command -v magick >/dev/null; then
+            magick -background none og.svg -resize 1200x630 og.png
+          elif command -v convert >/dev/null; then
+            convert -background none og.svg -resize 1200x630 og.png
+          else
+            python -m pip install --user cairosvg
+            python -c "import cairosvg; cairosvg.svg2png(url='og.svg',write_to='og.png',output_width=1200,output_height=630)"
+          fi
           file og.png
       - name: Commit generated image
         run: |
