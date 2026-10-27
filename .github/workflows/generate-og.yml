@@ -1,0 +1,37 @@
+name: Generate OG image
+on:
+  push:
+    branches: [main]
+    paths:
+      - og.svg
+      - .github/workflows/generate-og.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install SVG renderer and Korean fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq librsvg2-bin fonts-noto-cjk
+      - name: Render social preview image (1200 x 630)
+        run: |
+          rsvg-convert -w 1200 -h 630 -o og.png og.svg
+          file og.png
+      - name: Commit generated image
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add og.png
+          if ! git diff --cached --quiet; then
+            git commit -m "Build OG preview PNG from SVG"
+            git push
+          fi
