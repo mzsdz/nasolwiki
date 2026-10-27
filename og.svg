@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#211D24"/><stop offset=".6" stop-color="#302730"/><stop offset="1" stop-color="#654D4F"/></linearGradient>
+  <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F5C5A9" stop-opacity=".95"/><stop offset="1" stop-color="#F5C5A9" stop-opacity="0"/></radialGradient>
+  <linearGradient id="ribbon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6D5B5"/><stop offset="1" stop-color="#DD8391"/></linearGradient>
+  <clipPath id="frame"><rect width="1200" height="630" rx="0"/></clipPath>
+</defs>
+<g clip-path="url(#frame)">
+ <rect width="1200" height="630" fill="url(#bg)"/>
+ <circle cx="1000" cy="235" r="490" fill="url(#glow)" opacity=".45"/>
+ <circle cx="1037" cy="258" r="305" fill="none" stroke="#EFC4AD" stroke-opacity=".4" stroke-width="1"/>
+ <circle cx="1037" cy="258" r="255" fill="none" stroke="#EFC4AD" stroke-opacity=".24" stroke-width="1"/>
+ <path d="M780 600 C775 360 907 140 1064 95 C1158 67 1206 124 1252 190 L1252 650 Z" fill="url(#ribbon)" opacity=".65"/>
+ <path d="M841 630 C810 495 866 316 979 269 C1085 225 1143 301 1199 397 L1208 631 Z" fill="#513C45" opacity=".77"/>
+ <circle cx="974" cy="225" r="91" fill="#EEC0A9" opacity=".9"/>
+ <path d="M878 211 C881 119 947 91 1012 129 C1053 152 1067 189 1057 245 C1031 217 1013 185 973 186 C928 186 918 216 878 211 Z" fill="#3A2831"/>
+ <circle cx="1124" cy="267" r="67" fill="#F0C4A6" opacity=".96"/>
+ <path d="M1057 250 C1066 195 1109 183 1146 203 C1180 220 1199 250 1190 282 C1174 255 1151 247 1125 247 C1092 246 1081 264 1057 250 Z" fill="#3C2C33"/>
+ <path d="M869 522 C883 370 941 342 1028 377 C1088 403 1103 476 1112 631 H825 Z" fill="#F0D5CA" opacity=".95"/>
+ <path d="M1076 459 C1076 357 1115 343 1175 367 C1236 393 1240 481 1259 631 H1033 Z" fill="#40333B" opacity=".95"/>
+ <path d="M812 563 C929 520 1048 533 1177 574" fill="none" stroke="#FBE0CF" stroke-width="2" opacity=".24"/>
+ <text x="74" y="90" fill="#F5D4C7" font-size="24" letter-spacing="9" font-family="Arial, sans-serif">N A S O L   W I K I</text>
+ <text x="69" y="266" fill="#FFF8F4" font-size="111" font-weight="900" letter-spacing="-7" font-family="'Noto Sans CJK KR','Noto Sans KR',sans-serif">나솔<tspan fill="#F3A7AB">위키.</tspan></text>
+ <rect x="76" y="302" width="62" height="5" rx="3" fill="#E9A0AB"/>
+ <text x="74" y="365" fill="#FFF6F0" font-size="36" font-weight="600" letter-spacing="-1" font-family="'Noto Sans CJK KR','Noto Sans KR',sans-serif">사람과 사랑을 읽는 새로운 방식</text>
+ <text x="75" y="414" fill="#DDCFCC" font-size="24" font-family="'Noto Sans CJK KR','Noto Sans KR',sans-serif">나는 SOLO · 연애 · 관계 · 더 나은 나</text>
+ <rect x="73" y="520" width="520" height="1" fill="#D0B5AE" opacity=".5"/>
+ <text x="76" y="560" fill="#F1C0B3" font-size="22" font-family="Arial,sans-serif" letter-spacing="3">LOVE  /  PEOPLE  /  BETTER LIFE</text>
+ <text x="76" y="597" fill="#DED0CD" font-size="18" font-family="Arial,sans-serif">nasol.wiki</text>
+</g>
+</svg>
