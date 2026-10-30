@@ -1,0 +1,11 @@
+{
+  "name": "nasolwiki",
+  "version": "0.2.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.cjs",
+    "test": "node --test tests/*.test.cjs",
+    "dev": "node scripts/dev.cjs",
+    "report": "node scripts/report.cjs"
+  }
+}

@@ -1,0 +1,33 @@
+const fs=require('node:fs');
+const vm=require('node:vm');
+const path=require('node:path');
+const origin=process.env.SITE_URL||'https://nasol-wiki.vercel.app';
+const template=fs.readFileSync('index.html','utf8');
+const context={window:{localStorage:{setItem(){},removeItem(){},getItem(){return null}}},document:{querySelector(){return null}},console};
+vm.createContext(context);
+vm.runInContext(fs.readFileSync('articles.js','utf8'),context);
+const app=fs.readFileSync('app.js','utf8').split("window.addEventListener('popstate'")[0];
+vm.runInContext(app,context);
+const {ARTICLES}=context;
+const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+fs.rmSync('dist',{recursive:true,force:true});fs.mkdirSync('dist',{recursive:true});
+for(const file of ['app.js','articles.js','styles.css','og.png'])fs.copyFileSync(file,'dist/'+file);
+fs.cpSync('og','dist/og',{recursive:true});
+const pages=[['/','homePage()','나솔위키 — 사람과 사랑을 읽는 새로운 방식','사람, 사랑, 관계에 대한 좋은 질문들. 가볍게 읽고 오래 생각하는 연애 라이프스타일 매거진, 나솔위키.'],['/column','columnPage()','진동의 칼럼 | 나솔위키','삶과 연애, 매력과 여유를 이야기하는 진동의 칼럼.'],['/ebook','ebookPage()','진동의 전자책 · 출시 준비 중 | 나솔위키','진동의 연애·자기계발 PDF 전자책. 출시 준비 소식을 확인하고 구매 의향을 알려주세요.'],['/about','aboutPage()','소개와 편집 원칙 | 나솔위키','방송은 영감의 원천. 독립적으로 읽을 가치가 있는 연애·관계 매거진.'],['/wiki','wikiPage()','기존 나솔위키 | 나솔위키','기수·출연자 정보를 담은 기존 나솔위키로 이동합니다.'],['/saved','homePage()','저장한 기사 | 나솔위키','이 브라우저에 저장한 나솔위키 기사 목록입니다.'],['/404','notFound()','페이지를 찾지 못했어요 | 나솔위키','요청한 페이지를 찾을 수 없습니다.'],...ARTICLES.map(a=>['/article/'+a.id,`articlePage(${JSON.stringify(a.id)})`,a.title+' | 나솔위키',a.desc,a])];
+for(const [route,expression,title,desc,a] of pages){
+ let html=template.replace('<title>'+template.match(/<title>(.*?)<\/title>/s)[1]+'</title>',`<title>${escape(title)}</title>`);
+ const img=origin+(a?'/og/'+a.id+'.png':'/og.png');
+ html=html.replace(/(<meta (?:property|name)="(?:og:title|twitter:title)" content=")[^"]*/g,'$1'+escape(title));
+ html=html.replace(/(<meta (?:property|name)="(?:description|og:description|twitter:description)" content=")[^"]*/g,'$1'+escape(desc));
+ html=html.replace(/https:\/\/raw.githubusercontent.com\/mzsdz\/nasolwiki\/main\/og.png/g,img);
+ html=html.replace('content="website"',`content="${a?'article':'website'}"`);
+ const canonical=origin+(route==='/404'?'/404':route);
+ html=html.replace('</head>',`<link rel="canonical" href="${canonical}" />\n<meta property="og:url" content="${canonical}" />\n${['/saved','/404'].includes(route)?'<meta name="robots" content="noindex,follow" />':''}\n${a?'<meta property="article:published_time" content="'+a.date.replaceAll('.','-')+'T00:00:00+09:00" />':''}\n<script type="application/ld+json">${JSON.stringify(a?{'@context':'https://schema.org','@type':'Article',headline:a.title,description:a.desc,image:img,datePublished:a.date.replaceAll('.','-')+'T00:00:00+09:00',author:{'@type':'Person',name:a.author},publisher:{'@type':'Organization',name:'나솔위키'},mainEntityOfPage:canonical}:{'@context':'https://schema.org','@type':'WebSite',name:'나솔위키',url:origin}).replace(/</g,'\\u003c')}</script>\n</head>`);
+ vm.runInContext("activeTag='전체';onlySaved="+(route==='/saved')+";searchTerm=''",context);
+ html=html.replace('<!-- prerender -->',vm.runInContext(expression,context));
+ const target=route==='/404'?'dist/404.html':route==='/'?'dist/index.html':'dist'+route+'.html';
+ fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,html);
+}
+fs.writeFileSync('dist/robots.txt',`User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /saved\nSitemap: ${origin}/sitemap.xml\n`);
+fs.writeFileSync('dist/sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+pages.filter(p=>!['/saved','/404'].includes(p[0])).map(p=>`<url><loc>${origin+p[0]}</loc></url>`).join('')+'</urlset>');
+console.log(`Built ${pages.length} pages for ${origin}`);
