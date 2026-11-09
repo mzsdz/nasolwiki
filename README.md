@@ -4,8 +4,9 @@
 
 - 저장소: https://github.com/mzsdz/nasolwiki
 - 기존 Vercel 프로젝트: `prj_1wuYQBMCOQ9qsh0dH5Lw0pzGDkGM` / `mzsdz/nasolwiki`
-- 배포 주소: https://nasol-wiki.vercel.app
-- 기존 위키 도메인 `nasol.wiki`는 변경하지 않았습니다.
+- 기본 주소: https://nasol.wiki (`www.nasol.wiki`는 기본 주소로 이동)
+- Vercel 기본 주소: https://nasol-wiki.vercel.app
+- 도메인의 Glide 연결은 해제했습니다. 이전 Glide 위키의 기수·출연자 데이터는 이 매거진 저장소로 이전되지 않았습니다.
 
 ## 개발·배포
 

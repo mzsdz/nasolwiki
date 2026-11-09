@@ -1,7 +1,7 @@
 const fs=require('node:fs');
 const vm=require('node:vm');
 const path=require('node:path');
-const origin=process.env.SITE_URL||'https://nasol-wiki.vercel.app';
+const origin=process.env.SITE_URL||'https://nasol.wiki';
 const template=fs.readFileSync('index.html','utf8');
 const context={window:{localStorage:{setItem(){},removeItem(){},getItem(){return null}}},document:{querySelector(){return null}},console};
 vm.createContext(context);
@@ -13,7 +13,7 @@ const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 fs.rmSync('dist',{recursive:true,force:true});fs.mkdirSync('dist',{recursive:true});
 for(const file of ['app.js','articles.js','styles.css','og.png'])fs.copyFileSync(file,'dist/'+file);
 fs.cpSync('og','dist/og',{recursive:true});
-const pages=[['/','homePage()','나솔위키 — 사람과 사랑을 읽는 새로운 방식','사람, 사랑, 관계에 대한 좋은 질문들. 가볍게 읽고 오래 생각하는 연애 라이프스타일 매거진, 나솔위키.'],['/column','columnPage()','진동의 칼럼 | 나솔위키','삶과 연애, 매력과 여유를 이야기하는 진동의 칼럼.'],['/ebook','ebookPage()','진동의 전자책 · 출시 준비 중 | 나솔위키','진동의 연애·자기계발 PDF 전자책. 출시 준비 소식을 확인하고 구매 의향을 알려주세요.'],['/about','aboutPage()','소개와 편집 원칙 | 나솔위키','방송은 영감의 원천. 독립적으로 읽을 가치가 있는 연애·관계 매거진.'],['/wiki','wikiPage()','기존 나솔위키 | 나솔위키','기수·출연자 정보를 담은 기존 나솔위키로 이동합니다.'],['/saved','homePage()','저장한 기사 | 나솔위키','이 브라우저에 저장한 나솔위키 기사 목록입니다.'],['/404','notFound()','페이지를 찾지 못했어요 | 나솔위키','요청한 페이지를 찾을 수 없습니다.'],...ARTICLES.map(a=>['/article/'+a.id,`articlePage(${JSON.stringify(a.id)})`,a.title+' | 나솔위키',a.desc,a])];
+const pages=[['/','homePage()','나솔위키 — 사람과 사랑을 읽는 새로운 방식','사람, 사랑, 관계에 대한 좋은 질문들. 가볍게 읽고 오래 생각하는 연애 라이프스타일 매거진, 나솔위키.'],['/column','columnPage()','진동의 칼럼 | 나솔위키','삶과 연애, 매력과 여유를 이야기하는 진동의 칼럼.'],['/ebook','ebookPage()','진동의 전자책 · 출시 준비 중 | 나솔위키','진동의 연애·자기계발 PDF 전자책. 출시 준비 소식을 확인하고 구매 의향을 알려주세요.'],['/about','aboutPage()','소개와 편집 원칙 | 나솔위키','방송은 영감의 원천. 독립적으로 읽을 가치가 있는 연애·관계 매거진.'],['/wiki','wikiPage()','나솔위키 안내 | 나솔위키','기존 출연자·기수 자료는 새 사이트로 이전되지 않았습니다.'],['/saved','homePage()','저장한 기사 | 나솔위키','이 브라우저에 저장한 나솔위키 기사 목록입니다.'],['/404','notFound()','페이지를 찾지 못했어요 | 나솔위키','요청한 페이지를 찾을 수 없습니다.'],...ARTICLES.map(a=>['/article/'+a.id,`articlePage(${JSON.stringify(a.id)})`,a.title+' | 나솔위키',a.desc,a])];
 for(const [route,expression,title,desc,a] of pages){
  let html=template.replace('<title>'+template.match(/<title>(.*?)<\/title>/s)[1]+'</title>',`<title>${escape(title)}</title>`);
  const img=origin+(a?'/og/'+a.id+'.png':'/og.png');
